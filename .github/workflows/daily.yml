@@ -1,0 +1,44 @@
+name: Daily Stock Report
+ 
+on:
+  schedule:
+    # Runs every weekday at 21:30 UTC (~ after US market close).
+    # Adjust the cron for your timezone. This is UTC.
+    - cron: "30 21 * * 1-5"
+  workflow_dispatch: {}   # lets you run it manually from the Actions tab
+ 
+permissions:
+  contents: write   # needed to push the report to the gh-pages branch
+ 
+jobs:
+  build-report:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repo
+        uses: actions/checkout@v4
+ 
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+ 
+      - name: Install dependencies
+        run: pip install pandas numpy yfinance requests
+ 
+      - name: Build the HTML report
+        env:
+          DATA_SOURCE: stooq            # use stooq for history (cloud-friendly)
+          FINNHUB_KEY: ${{ secrets.FINNHUB_KEY }}   # optional real-time quote + news
+        run: |
+          python make_report.py --csv Positions_Margin.csv --satellite satellite_watchlist.csv ${FINNHUB_KEY:+--finnhub-key "$FINNHUB_KEY"}
+          # Publish the newest report as index.html so the Pages URL always shows latest
+          mkdir -p public
+          cp daily_report_*.html public/ 2>/dev/null || true
+          LATEST=$(ls -t daily_report_*.html | head -1)
+          cp "$LATEST" public/index.html
+ 
+      - name: Deploy to GitHub Pages
+        uses: peaceiris/actions-gh-pages@v4
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          publish_dir: ./public
