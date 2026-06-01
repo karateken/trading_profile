@@ -1,0 +1,192 @@
+<!DOCTYPE html><html lang="zh-HK"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>每日股票報告 2026-06-01 04:04</title><style>
+* { box-sizing: border-box; }
+body { font-family: -apple-system, "PingFang HK", "Microsoft JhengHei", sans-serif;
+  margin: 0; padding: 12px; background: #f4f5f7; color: #1a1a1a; line-height: 1.6; }
+h1 { font-size: 20px; margin: 8px 0 4px; }
+h2 { font-size: 16px; margin: 0 0 8px; }
+.stamp { color: #666; font-size: 13px; margin-bottom: 12px; }
+.guide { background: #eef3fb; border-radius: 12px; padding: 14px 16px; margin-bottom: 16px; font-size: 14px; }
+.guide ul { margin: 6px 0; padding-left: 20px; }
+.guide .warn { color: #8a4b00; margin-top: 8px; }
+.card { background: #fff; border-radius: 12px; padding: 14px 16px; margin-bottom: 14px;
+  box-shadow: 0 1px 3px rgba(0,0,0,.06); }
+.card h2 { border-bottom: 1px solid #eee; padding-bottom: 6px; }
+pre { white-space: pre-wrap; word-wrap: break-word; font-family: ui-monospace, "SF Mono", Menlo, monospace;
+  font-size: 12.5px; margin: 8px 0; overflow-x: auto; }
+.tp, .good, .in, .pass { color: #0a7d3c; font-weight: 600; }
+.sl, .trap, .fail { color: #c0271a; font-weight: 600; }
+.wait, .range { color: #8a6d00; font-weight: 600; }
+.out { color: #777; }
+.foot { color: #888; font-size: 12px; text-align: center; margin: 16px 0; }
+</style></head><body><h1>每日股票報告</h1><div class="stamp">2026-06-01 04:04</div>
+<div class="guide">
+  <h2>點睇呢份報告（中文導讀）</h2>
+  <p>呢份係「提示」報告，<b>唔係買賣指令</b>。所有決定同落單由你自己做。核心 ETF（例如 XEQT）長線揸住，唔喺度擇時；以下監察嘅係你嘅持倉同 AI 衛星股。</p>
+  <ul>
+    <li><b>IN</b> = 該技術策略而家會「持倉」（趨勢向上）</li>
+    <li><b>OUT</b> = 該技術策略而家會「揸現金」（趨勢未向上）</li>
+    <li><b>TAKE-PROFIT reached</b> = 升到你設嘅 +3% 止賺位 → 考慮減持</li>
+    <li><b>STOP-LOSS reached</b> = 跌到你設嘅 -2% 止蝕位 → 考慮離場</li>
+    <li><b>within range</b> = 仲喺止賺同止蝕之間，未觸發</li>
+  </ul>
+  <p>兩步篩選嘅四個格：<b>Good co + uptrend</b>（基本面合格＋技術向上→考慮入場）、<b>Good co, WAIT</b>（好公司但等時機）、<b>Weak co RISING</b>（升緊但基本面差，陷阱）、<b>Skip / ETF</b>（唔合格或 ETF）。</p>
+  <p class="warn">提醒：訊號唔等於保證；衛星係集中押注 AI、會一齊升跌；數據幫你理解，決定係你做。（教學資訊，唔係投資建議。）</p>
+</div>
+<h1>Part A：你嘅現有組合</h1><div class="card"><h2>A1 · 止賺 / 止蝕檢查</h2><pre>
+Watchlist from: Positions_Margin.csv
+Take-profit: +3.00%   Stop-loss: -2.00%   Anchor: current
+
+(--news needs the finnhub package: pip install finnhub-python)
+
+Sym         Now   Anchor      TP@      SL@    Chg%  Status
+----------------------------------------------------------
+TSLA     435.79   435.79   448.86   427.07  +0.00%  <span class="range">within range</span>
+GLD      417.12   417.12   429.63   408.78  +0.00%  <span class="range">within range</span>
+NVDA     211.14   211.14   217.47   206.92  +0.00%  <span class="range">within range</span>
+MMM      153.13   153.13   157.72   150.07  +0.00%  <span class="range">within range</span>
+ONON      40.82    40.82    42.04    40.00  +0.00%  <span class="range">within range</span>
+
+NOTE: Flags and facts only. This tool does NOT place orders and does
+NOT tell you to buy or sell. A stop-loss limits losses but does not
+guarantee a fill at that exact price. You decide; you trade yourself.
+Educational information, not investment advice.
+</pre></div><div class="card"><h2>A2 · 組合快照（已記錄歷史）</h2><pre>
+Loaded 5 positions from:
+  Positions_Margin.csv
+
+=== HOLDINGS (LIVE prices) ===
+Sym     Qty     Price      Value        P/L     P/L%   Weight
+-------------------------------------------------------------
+TSLA      0    435.79       0.00      +0.00    +0.0%     0.0%
+GLD       0    417.12       0.00      +0.00    +0.0%     0.0%
+NVDA      0    211.14       0.00      +0.00    +0.0%     0.0%
+MMM       0    153.13       0.00      +0.00    +0.0%     0.0%
+ONON      0     40.82       0.00      +0.00    +0.0%     0.0%
+-------------------------------------------------------------
+TOTAL                       0.00      +0.00    +0.0%   100.0%
+
+=== STRUCTURE (neutral facts) ===
+  Holdings: 5   Total value: 0.00
+  Largest position: TSLA at 0.0% of invested value
+  Top 2 positions: 0.0% of invested value
+  Currencies held: USD
+
+Snapshot appended to: portfolio_history.csv
+  (open it in Excel to track how your portfolio changes over time)
+
+NOTE: Facts and neutral signals only. Whether any of this is
+&#x27;good&#x27; depends on your goals, timeline, and risk tolerance.
+This is educational information, not investment advice.
+</pre></div><div class="card"><h2>A3 · 兩步篩選（基本面＋技術）</h2><pre>
+Two-step screen  (fundamental gate: need &gt;= 3 of 4 checks)
+
+================  TSLA  ================
+  STEP 1 (fundamentals): 4/4 checks pass
+      <span class="pass">PASS</span> Profitable (margin&gt;0)      margin 3.9%
+      <span class="pass">PASS</span> Revenue growing (&gt;=0)      rev growth 15.8%
+      <span class="pass">PASS</span> Positive free cash flow    FCF 5.25B
+      <span class="pass">PASS</span> Debt/Equity &lt; 200          D/E 19
+  STEP 2 (technical): <span class="in">IN </span>  (ma:<span class="in">IN </span> mome:<span class="in">IN </span> rsi:<span class="out">OUT</span>  boll:IN)
+  =&gt; QUADRANT: <span class="good">&gt;&gt;&gt; Good co + uptrend</span>
+
+================  GLD  ================
+  STEP 1 (fundamentals): n/a - looks like an ETF/fund
+  STEP 2 (technical): <span class="out">OUT</span>   (ma:<span class="out">OUT</span>  mome:<span class="out">OUT</span>  rsi:<span class="in">IN </span> boll:<span class="out">OUT</span>)
+  =&gt; QUADRANT: ETF - technical only (no company fundamentals)
+
+================  NVDA  ================
+  STEP 1 (fundamentals): 4/4 checks pass
+      <span class="pass">PASS</span> Profitable (margin&gt;0)      margin 63.0%
+      <span class="pass">PASS</span> Revenue growing (&gt;=0)      rev growth 85.2%
+      <span class="pass">PASS</span> Positive free cash flow    FCF 46.34B
+      <span class="pass">PASS</span> Debt/Equity &lt; 200          D/E 7
+  STEP 2 (technical): <span class="out">OUT</span>   (ma:<span class="in">IN </span> mome:<span class="in">IN </span> rsi:<span class="out">OUT</span>  boll:<span class="out">OUT</span>)
+  =&gt; QUADRANT: <span class="wait">Good co, WAIT (timing not yet)</span>
+
+================  MMM  ================
+  STEP 1 (fundamentals): 3/4 checks pass
+      <span class="pass">PASS</span> Profitable (margin&gt;0)      margin 11.1%
+      <span class="pass">PASS</span> Revenue growing (&gt;=0)      rev growth 1.3%
+      <span class="pass">PASS</span> Positive free cash flow    FCF 2.32B
+      <span class="fail">FAIL</span> Debt/Equity &lt; 200          D/E 396
+  STEP 2 (technical): <span class="out">OUT</span>   (ma:<span class="out">OUT</span>  mome:<span class="out">OUT</span>  rsi:<span class="out">OUT</span>  boll:IN)
+  =&gt; QUADRANT: <span class="wait">Good co, WAIT (timing not yet)</span>
+
+================  ONON  ================
+  STEP 1 (fundamentals): 4/4 checks pass
+      <span class="pass">PASS</span> Profitable (margin&gt;0)      margin 8.0%
+      <span class="pass">PASS</span> Revenue growing (&gt;=0)      rev growth 14.5%
+      <span class="pass">PASS</span> Positive free cash flow    FCF 0.24B
+      <span class="pass">PASS</span> Debt/Equity &lt; 200          D/E 31
+  STEP 2 (technical): <span class="out">OUT</span>   (ma:<span class="out">OUT</span>  mome:<span class="out">OUT</span>  rsi:<span class="out">OUT</span>  boll:IN)
+  =&gt; QUADRANT: <span class="wait">Good co, WAIT (timing not yet)</span>
+
+Legend: &#x27;Good co + uptrend&#x27; = both met | &#x27;WAIT&#x27; = quality but no trend
+        &#x27;CAUTION/trap&#x27; = rising but weak fundamentals | &#x27;Skip&#x27; = neither
+
+NOTE: Simplified educational screen on free data. Thresholds are crude
+and sector-blind. This organizes thinking; it makes no buy/sell call.
+Not investment advice.
+</pre></div><h1>Part B：AI 衛星 watchlist</h1><div class="card"><h2>B1 · 衛星 止賺 / 止蝕檢查</h2><pre>
+Watchlist from: satellite_watchlist.csv
+Take-profit: +3.00%   Stop-loss: -2.00%   Anchor: current
+
+(--news needs the finnhub package: pip install finnhub-python)
+
+Sym         Now   Anchor      TP@      SL@    Chg%  Status
+----------------------------------------------------------
+NVDA     211.14   211.14   217.47   206.92  +0.00%  <span class="range">within range</span>
+CEG      287.75   287.75   296.38   282.00  +0.00%  <span class="range">within range</span>
+NOK       14.84    14.84    15.29    14.54  +0.00%  <span class="range">within range</span>
+VRT      315.71   315.71   325.18   309.40  +0.00%  <span class="range">within range</span>
+
+NOTE: Flags and facts only. This tool does NOT place orders and does
+NOT tell you to buy or sell. A stop-loss limits losses but does not
+guarantee a fill at that exact price. You decide; you trade yourself.
+Educational information, not investment advice.
+</pre></div><div class="card"><h2>B2 · 衛星 兩步篩選</h2><pre>
+Two-step screen  (fundamental gate: need &gt;= 3 of 4 checks)
+
+================  NVDA  ================
+  STEP 1 (fundamentals): 4/4 checks pass
+      <span class="pass">PASS</span> Profitable (margin&gt;0)      margin 63.0%
+      <span class="pass">PASS</span> Revenue growing (&gt;=0)      rev growth 85.2%
+      <span class="pass">PASS</span> Positive free cash flow    FCF 46.34B
+      <span class="pass">PASS</span> Debt/Equity &lt; 200          D/E 7
+  STEP 2 (technical): <span class="out">OUT</span>   (ma:<span class="in">IN </span> mome:<span class="in">IN </span> rsi:<span class="out">OUT</span>  boll:<span class="out">OUT</span>)
+  =&gt; QUADRANT: <span class="wait">Good co, WAIT (timing not yet)</span>
+
+================  CEG  ================
+  STEP 1 (fundamentals): 3/4 checks pass
+      <span class="pass">PASS</span> Profitable (margin&gt;0)      margin 12.7%
+      <span class="pass">PASS</span> Revenue growing (&gt;=0)      rev growth 63.8%
+      <span class="fail">FAIL</span> Positive free cash flow    FCF -4.48B
+      <span class="pass">PASS</span> Debt/Equity &lt; 200          D/E 66
+  STEP 2 (technical): <span class="out">OUT</span>   (ma:<span class="out">OUT</span>  mome:<span class="out">OUT</span>  rsi:<span class="in">IN </span> boll:<span class="out">OUT</span>)
+  =&gt; QUADRANT: <span class="wait">Good co, WAIT (timing not yet)</span>
+
+================  NOK  ================
+  STEP 1 (fundamentals): 4/4 checks pass
+      <span class="pass">PASS</span> Profitable (margin&gt;0)      margin 4.0%
+      <span class="pass">PASS</span> Revenue growing (&gt;=0)      rev growth 2.4%
+      <span class="pass">PASS</span> Positive free cash flow    FCF 1.60B
+      <span class="pass">PASS</span> Debt/Equity &lt; 200          D/E 16
+  STEP 2 (technical): <span class="in">IN </span>  (ma:<span class="in">IN </span> mome:<span class="in">IN </span> rsi:<span class="out">OUT</span>  boll:IN)
+  =&gt; QUADRANT: <span class="good">&gt;&gt;&gt; Good co + uptrend</span>
+
+================  VRT  ================
+  STEP 1 (fundamentals): 4/4 checks pass
+      <span class="pass">PASS</span> Profitable (margin&gt;0)      margin 14.4%
+      <span class="pass">PASS</span> Revenue growing (&gt;=0)      rev growth 30.1%
+      <span class="pass">PASS</span> Positive free cash flow    FCF 1.96B
+      <span class="pass">PASS</span> Debt/Equity &lt; 200          D/E 77
+  STEP 2 (technical): <span class="out">OUT</span>   (ma:<span class="in">IN </span> mome:<span class="in">IN </span> rsi:<span class="out">OUT</span>  boll:<span class="out">OUT</span>)
+  =&gt; QUADRANT: <span class="wait">Good co, WAIT (timing not yet)</span>
+
+Legend: &#x27;Good co + uptrend&#x27; = both met | &#x27;WAIT&#x27; = quality but no trend
+        &#x27;CAUTION/trap&#x27; = rising but weak fundamentals | &#x27;Skip&#x27; = neither
+
+NOTE: Simplified educational screen on free data. Thresholds are crude
+and sector-blind. This organizes thinking; it makes no buy/sell call.
+Not investment advice.
+</pre></div><div class="foot">訊號只供參考，唔係買賣指令。決定同落單係你做。<br>Educational, not investment advice.</div></body></html>
