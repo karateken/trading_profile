@@ -1,0 +1,41 @@
+name: Daily Stock Report
+
+on:
+  schedule:
+    - cron: "30 21 * * 1-5"
+  workflow_dispatch: {}
+
+permissions:
+  contents: write
+
+jobs:
+  build-report:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repo
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Install dependencies
+        run: pip install pandas numpy yfinance requests
+
+      - name: Build the HTML report
+        env:
+          DATA_SOURCE: stooq
+          FINNHUB_KEY: ${{ secrets.FINNHUB_KEY }}
+        run: |
+          python make_report.py --csv Positions_Margin.csv --satellite satellite_watchlist.csv --universe swing_universe.csv ${FINNHUB_KEY:+--finnhub-key "$FINNHUB_KEY"}
+          mkdir -p public
+          cp daily_report_*.html public/ 2>/dev/null || true
+          LATEST=$(ls -t daily_report_*.html | head -1)
+          cp "$LATEST" public/index.html
+
+      - name: Deploy to GitHub Pages
+        uses: peaceiris/actions-gh-pages@v4
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          publish_dir: ./public

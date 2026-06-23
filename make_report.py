@@ -3,34 +3,28 @@
 """
 make_report.py - run the daily checks and write a phone-friendly HTML report.
 
-It calls the existing tools (watchlist / portfolio / screener) as functions,
-captures their text output, and lays it out as a clean, responsive HTML page
-with a Chinese reading-guide on top and colour-coded signals.
-
-Usage:
-    python make_report.py --csv Positions_Margin.csv --satellite satellite_watchlist.csv
-Output:
-    daily_report_YYYY-MM-DD.html  (open on phone via OneDrive)
+Part A: your current portfolio (watchlist TP/SL, snapshot, two-step screen)
+Part B: your AI satellite watchlist (5 holdings you monitor)
+Part C: swing-trading scan universe (larger candidate pool, screen only)
 
 Signals only, not orders. Educational, not investment advice.
 """
 
 import argparse
 import io
+import os
 import re
 import sys
 from contextlib import redirect_stdout
 from datetime import datetime
 from html import escape
 
-# Import the tools as modules (must be in the same folder)
 import watchlist as wl
 import portfolio as pf
 import screener as sc
 
 
 def capture(fn, *args, **kwargs):
-    """Run a function and return whatever it printed to stdout as a string."""
     buf = io.StringIO()
     try:
         with redirect_stdout(buf):
@@ -43,7 +37,6 @@ def capture(fn, *args, **kwargs):
 
 
 def colorize(text):
-    """Wrap key signal phrases in coloured spans (returns HTML-safe string)."""
     t = escape(text)
     rules = [
         (r"(TAKE-PROFIT reached[^\n<]*)", "tp"),
@@ -65,16 +58,15 @@ def colorize(text):
 GUIDE_HTML = """
 <div class="guide">
   <h2>點睇呢份報告（中文導讀）</h2>
-  <p>呢份係「提示」報告，<b>唔係買賣指令</b>。所有決定同落單由你自己做。核心 ETF（例如 XEQT）長線揸住，唔喺度擇時；以下監察嘅係你嘅持倉同 AI 衛星股。</p>
+  <p>呢份係「提示」報告，<b>唔係買賣指令</b>。所有決定同落單由你自己做。核心 ETF（例如 XEQT）長線揸住，唔喺度擇時。</p>
   <ul>
     <li><b>IN</b> = 該技術策略而家會「持倉」（趨勢向上）</li>
     <li><b>OUT</b> = 該技術策略而家會「揸現金」（趨勢未向上）</li>
-    <li><b>TAKE-PROFIT reached</b> = 升到你設嘅 +3% 止賺位 → 考慮減持</li>
-    <li><b>STOP-LOSS reached</b> = 跌到你設嘅 -2% 止蝕位 → 考慮離場</li>
-    <li><b>within range</b> = 仲喺止賺同止蝕之間，未觸發</li>
+    <li><b>TAKE-PROFIT reached</b> = 升到你設嘅止賺位 → 考慮減持</li>
+    <li><b>STOP-LOSS reached</b> = 跌到你設嘅止蝕位 → 考慮離場</li>
   </ul>
-  <p>兩步篩選嘅四個格：<b>Good co + uptrend</b>（基本面合格＋技術向上→考慮入場）、<b>Good co, WAIT</b>（好公司但等時機）、<b>Weak co RISING</b>（升緊但基本面差，陷阱）、<b>Skip / ETF</b>（唔合格或 ETF）。</p>
-  <p class="warn">提醒：訊號唔等於保證；衛星係集中押注 AI、會一齊升跌；數據幫你理解，決定係你做。（教學資訊，唔係投資建議。）</p>
+  <p>兩步篩選四個格：<b>Good co + uptrend</b>（考慮入場）、<b>Good co, WAIT</b>（等時機）、<b>Weak co RISING</b>（陷阱）、<b>Skip / ETF</b>。</p>
+  <p class="warn">Part C 係 swing 掃描池（只篩選、唔代表持有）。掃描多 ≠ 買得多；揀邊隻、買唔買、止蝕，全部係你嘅決定。訊號唔等於保證。教學資訊，唔係投資建議。</p>
 </div>
 """
 
@@ -109,6 +101,7 @@ def main():
     p = argparse.ArgumentParser()
     p.add_argument("--csv", required=True)
     p.add_argument("--satellite", default=None)
+    p.add_argument("--universe", default=None)
     p.add_argument("--take", type=float, default=3.0)
     p.add_argument("--stop", type=float, default=2.0)
     p.add_argument("--minpass", type=int, default=3)
@@ -119,11 +112,11 @@ def main():
     stamp = datetime.now().strftime("%Y-%m-%d %H:%M")
     parts = []
 
-    # PART A
     parts.append('<h1>每日股票報告</h1>')
     parts.append(f'<div class="stamp">{stamp}</div>')
     parts.append(GUIDE_HTML)
 
+    # PART A - current portfolio
     parts.append('<h1>Part A：你嘅現有組合</h1>')
     parts.append(section("A1 · 止賺 / 止蝕檢查",
         capture(wl.monitor, args.csv, take=args.take, stop=args.stop,
@@ -133,18 +126,24 @@ def main():
     parts.append(section("A3 · 兩步篩選（基本面＋技術）",
         capture(sc.run, sc.read_tickers_from_csv(args.csv), min_pass=args.minpass)))
 
-    # PART B (satellite)
-    if args.satellite:
-        import os
-        if os.path.exists(args.satellite):
-            parts.append('<h1>Part B：AI 衛星 watchlist</h1>')
-            parts.append(section("B1 · 衛星 止賺 / 止蝕檢查",
-                capture(wl.monitor, args.satellite, take=args.take, stop=args.stop,
-                        anchor="current", use_news=use_news, finnhub_key=args.finnhub_key)))
-            parts.append(section("B2 · 衛星 兩步篩選",
-                capture(sc.run, sc.read_tickers_from_csv(args.satellite), min_pass=args.minpass)))
-        else:
-            parts.append(f'<div class="card"><p>注意：搵唔到 {escape(args.satellite)}，已略過衛星部分。</p></div>')
+    # PART B - satellite monitoring (5 holdings)
+    if args.satellite and os.path.exists(args.satellite):
+        parts.append('<h1>Part B：AI 衛星監察（持有/長線）</h1>')
+        parts.append(section("B1 · 衛星 止賺 / 止蝕檢查",
+            capture(wl.monitor, args.satellite, take=args.take, stop=args.stop,
+                    anchor="current", use_news=use_news, finnhub_key=args.finnhub_key)))
+        parts.append(section("B2 · 衛星 兩步篩選",
+            capture(sc.run, sc.read_tickers_from_csv(args.satellite), min_pass=args.minpass)))
+    elif args.satellite:
+        parts.append(f'<div class="card"><p>注意：搵唔到 {escape(args.satellite)}，已略過衛星部分。</p></div>')
+
+    # PART C - swing scan universe (screen only, larger pool)
+    if args.universe and os.path.exists(args.universe):
+        parts.append('<h1>Part C：Swing 掃描池（只篩選，唔代表持有）</h1>')
+        parts.append(section("C1 · 掃描池 兩步篩選（搵 Good co + uptrend 做候選）",
+            capture(sc.run, sc.read_tickers_from_csv(args.universe), min_pass=args.minpass)))
+    elif args.universe:
+        parts.append(f'<div class="card"><p>注意：搵唔到 {escape(args.universe)}，已略過掃描池部分。</p></div>')
 
     parts.append('<div class="foot">訊號只供參考，唔係買賣指令。決定同落單係你做。<br>Educational, not investment advice.</div>')
 
